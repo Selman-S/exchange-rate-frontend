@@ -10,6 +10,8 @@ const { Title } = Typography;
 const Home = () => {
   const [rates, setRates] = useState([]);
 
+  // startDate:'2024-11-01',
+  // endDate:'2024-11-30'
   useEffect(() => {
     api.get('/rates').then((response) => {
       setRates(response.data.data);

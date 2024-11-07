@@ -6,6 +6,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import api from '../../services/api';
 import { useParams } from 'react-router-dom';
 import { formatTL } from '../../utils/formatTL';
+import moment from 'moment-timezone'; // moment-timezone ekledik
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -37,6 +38,7 @@ const PortfolioDetail = () => {
       setRates(ratesRes.data.data);
     } catch (error) {
       console.error('Portföy detaylarını alırken hata oluştu:', error);
+      message.error('Portföy detaylarını alırken hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -84,12 +86,15 @@ const PortfolioDetail = () => {
       title: 'Miktar',
       dataIndex: 'amount',
       key: 'amount',
+      render: (text) => `${text}`,
     },
     {
       title: 'Maliyet Fiyatı',
-      dataIndex: 'costPrice',
-      key: 'costPrice',
-      render: (text) => `${formatTL(text)}`,
+      key: 'totalCostPrice',
+      render: (text, record) => {
+        const totalCostPrice = record.amount * record.costPrice;
+        return `${formatTL(totalCostPrice)}`;
+      },
     },
     {
       title: 'Değer',
@@ -133,7 +138,7 @@ const PortfolioDetail = () => {
       title: 'Alış Tarihi',
       dataIndex: 'purchaseDate',
       key: 'purchaseDate',
-      render: (text) => new Date(text).toLocaleString(),
+      render: (text) => moment(text).tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: 'İşlemler',
@@ -220,8 +225,11 @@ const PortfolioDetail = () => {
 
               return (
                 <Table.Summary.Row>
-                  <Table.Summary.Cell colSpan={4}>
+                  <Table.Summary.Cell colSpan={3}>
                     <strong>Toplam</strong>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell>
+                    <strong>{formatTL(totalCost)}</strong>
                   </Table.Summary.Cell>
                   <Table.Summary.Cell>
                     <strong>{formatTL(totalCurrent)}</strong>
@@ -271,6 +279,7 @@ const PortfolioDetail = () => {
                       setCostPrice(null);
                     } catch (error) {
                       console.error('Varlık adları veya kurları alınırken hata oluştu:', error);
+                      message.error('Varlık adları veya kurları alınırken hata oluştu');
                     }
                   }}
                 >
@@ -311,7 +320,7 @@ const PortfolioDetail = () => {
                 name="amount"
                 rules={[{ required: true, message: 'Lütfen miktarı girin!' }]}
               >
-                <Input placeholder="Miktar" type="number" />
+                <Input placeholder="Miktar" type="number" min="0" />
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
