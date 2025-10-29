@@ -15,11 +15,12 @@ export const AuthProvider = ({ children }) => {
       api
         .get('/auth/me')
         .then((response) => {
-          console.log("response", response.data.data);
-          setUser(response.data.data);
+          console.log("User data:", response);
+          setUser(response.data);
           setLoading(false);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('Me endpoint error:', error);
           localStorage.removeItem('token');
           setUser(null);
           setLoading(false);
@@ -32,11 +33,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
-      localStorage.setItem('token', response.data.token);
+      console.log('Login response:', response);
       
-      // Kullanıcı verisini al
-      const userResponse = await api.get('/auth/me');
-      setUser(userResponse.data.data);
+      // Token'ı kaydet
+      if (!response.token) {
+        throw new Error('Token bulunamadı');
+      }
+      localStorage.setItem('token', response.token);
+      
+      // Kullanıcı bilgisini set et (login response'unda zaten var)
+      setUser(response.data);
       
       navigate('/');
     } catch (error) {

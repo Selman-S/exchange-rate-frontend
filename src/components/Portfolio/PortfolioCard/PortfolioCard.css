@@ -1,0 +1,146 @@
+/* src/components/Portfolio/PortfolioCard/PortfolioCard.css */
+
+.portfolio-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.portfolio-card {
+  height: 100%;
+  transition: all var(--transition-base);
+}
+
+.portfolio-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Header */
+.portfolio-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.portfolio-card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.portfolio-icon {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.portfolio-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portfolio-card-menu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.portfolio-card-menu:hover {
+  background-color: var(--color-gray-100);
+  color: var(--color-text-primary);
+}
+
+/* Main value */
+.portfolio-card-value {
+  margin-bottom: var(--spacing-lg);
+}
+
+.total-value {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.total-cost-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* PNL */
+.portfolio-card-pnl {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-weight: 600;
+}
+
+.portfolio-card-pnl.positive {
+  color: var(--color-gain);
+  background-color: rgba(82, 196, 26, 0.1);
+}
+
+.portfolio-card-pnl.negative {
+  color: var(--color-loss);
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.pnl-value {
+  font-size: var(--font-size-lg);
+}
+
+.pnl-percent {
+  opacity: 0.8;
+}
+
+/* Footer */
+.portfolio-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-divider);
+}
+
+.asset-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.portfolio-card-action {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .portfolio-card {
+    padding: var(--spacing-md);
+  }
+
+  .total-value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .portfolio-name {
+    font-size: var(--font-size-base);
+  }
+}
+

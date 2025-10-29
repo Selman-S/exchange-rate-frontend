@@ -1,0 +1,52 @@
+/* src/pages/Market/MarketPage.css */
+
+.market-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.market-page-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.market-page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.market-page-subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+.market-results-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xs);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .market-page-header {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .market-page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .market-page-subtitle {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  .market-page-title {
+    font-size: var(--font-size-xl);
+  }
+}
+

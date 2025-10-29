@@ -1,0 +1,63 @@
+/* src/components/Portfolio/PerformanceTable/PerformanceTable.css */
+
+.performance-table {
+  width: 100%;
+}
+
+/* Asset cell */
+.asset-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.asset-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.asset-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.asset-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* PNL styling */
+.pnl-value {
+  font-weight: 600;
+}
+
+.pnl-percent {
+  font-size: var(--font-size-xs);
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.text-gain {
+  color: var(--color-gain);
+}
+
+.text-loss {
+  color: var(--color-loss);
+}
+
+/* Summary row */
+.summary-row {
+  background-color: var(--color-gray-50);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .performance-table .ant-table-wrapper {
+    overflow-x: auto;
+  }
+}
+

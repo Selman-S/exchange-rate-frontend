@@ -1,0 +1,41 @@
+/* src/components/Portfolio/AddAssetModal/AddAssetModal.css */
+
+.add-asset-modal .ant-modal-body {
+  padding-top: var(--spacing-lg);
+}
+
+/* Price info */
+.price-info {
+  padding: var(--spacing-md);
+  background-color: #e6f7ff;
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.price-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.price-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.price-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-warning);
+  margin-top: var(--spacing-xs);
+}
+
+.price-loading {
+  padding: var(--spacing-md);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+

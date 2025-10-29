@@ -1,34 +1,54 @@
-// services/api.js
-
+// src/services/api.js
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_BASE_URL+'/api';
-console.log("API_URL : ",API_URL);
-
+// Axios instance oluştur
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-// İsteklerden önce Authorization başlığını ekleyin
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// Yanıtları ve hataları yakalayın
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Hata yönetimi
-    if (error.response && error.response.status === 401) {
-      // Yetkilendirme hatası, kullanıcıyı çıkış yapmaya yönlendirin
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+// Request interceptor - Token ekle
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
+  }
+);
+
+// Response interceptor - Hata yönetimi
+api.interceptors.response.use(
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    if (error.response) {
+      // Sunucu hata yanıtı
+      const { status, data } = error.response;
+      
+      // 401 - Unauthorized
+      if (status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+      
+      // Hata mesajını döndür
+      return Promise.reject(data.error || 'Bir hata oluştu');
+    } else if (error.request) {
+      // İstek gönderildi ama yanıt alınamadı
+      return Promise.reject('Sunucuya ulaşılamıyor');
+    } else {
+      // İstek oluşturulurken hata oluştu
+      return Promise.reject('İstek oluşturulurken hata oluştu');
+    }
   }
 );
 

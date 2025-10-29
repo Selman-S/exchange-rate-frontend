@@ -1,0 +1,72 @@
+/* src/components/Market/MarketFilters/MarketFilters.css */
+
+.market-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.filter-search {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-type {
+  flex-shrink: 0;
+}
+
+.filter-sort {
+  flex-shrink: 0;
+}
+
+.filter-favorites {
+  flex-shrink: 0;
+}
+
+.filter-reset {
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .market-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-search,
+  .filter-type,
+  .filter-sort,
+  .filter-favorites,
+  .filter-reset {
+    width: 100%;
+  }
+
+  .filter-type .ant-radio-group {
+    width: 100%;
+    display: flex;
+  }
+
+  .filter-type .ant-radio-button-wrapper {
+    flex: 1;
+    text-align: center;
+  }
+
+  .filter-sort select {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .market-filters {
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+}
+

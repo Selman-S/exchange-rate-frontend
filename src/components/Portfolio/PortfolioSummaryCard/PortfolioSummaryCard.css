@@ -1,0 +1,78 @@
+/* src/components/Portfolio/PortfolioSummaryCard/PortfolioSummaryCard.css */
+
+.portfolio-summary-card {
+  margin-bottom: var(--spacing-xl);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.summary-main {
+  grid-column: span 2;
+}
+
+.summary-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.summary-value-secondary {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.summary-pnl {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.summary-pnl.positive {
+  color: var(--color-gain);
+}
+
+.summary-pnl.negative {
+  color: var(--color-loss);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .summary-main {
+    grid-column: span 2;
+  }
+
+  .summary-value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .summary-value-secondary,
+  .summary-pnl {
+    font-size: var(--font-size-lg);
+  }
+}
+

@@ -8,7 +8,7 @@ const PrivateRoute = ({ children }) => {
   
   // Yükleniyorsa, bir yükleme göstergesi veya boş bir şey render et
   if (loading) {
-    return <Loading fullScreen={true} message="Veriler yükleniyor..." />;
+    return <Loading fullScreen={true} text="Yükleniyor..." />;
   }
 
   // 'user' değeri 'null' ise '/login' sayfasına yönlendirir

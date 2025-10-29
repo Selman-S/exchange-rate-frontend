@@ -1,0 +1,21 @@
+/* src/components/Portfolio/CreatePortfolioModal/CreatePortfolioModal.css */
+
+.create-portfolio-modal .ant-modal-body {
+  padding-top: var(--spacing-lg);
+}
+
+.create-portfolio-info {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: #e6f7ff;
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+}
+
+.create-portfolio-info p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+

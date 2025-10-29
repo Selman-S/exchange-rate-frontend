@@ -1,0 +1,40 @@
+/* src/components/Chart/PeriodSelector/PeriodSelector.css */
+
+.period-selector {
+  display: inline-flex;
+}
+
+.period-selector .ant-btn-group {
+  box-shadow: var(--shadow-sm);
+}
+
+.period-selector .ant-btn {
+  min-width: 45px;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+}
+
+.period-selector .ant-btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.period-selector .ant-btn-default:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .period-selector {
+    justify-content: center;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .period-selector .ant-btn {
+    min-width: 40px;
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
+  }
+}
+
