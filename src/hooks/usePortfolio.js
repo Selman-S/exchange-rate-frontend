@@ -11,6 +11,9 @@ import {
   fetchPortfolioValueSeries,
   createAsset,
   deleteAsset,
+  fetchTransactions,
+  createTransaction,
+  deleteTransaction,
 } from '../services/portfolioApi';
 
 /**
@@ -67,10 +70,10 @@ export const usePortfolioAssets = (portfolioId, options = {}) => {
 /**
  * Portföy değer serisini getirir (tarihsel performans)
  */
-export const usePortfolioValueSeries = (portfolioId, period = '6M', options = {}) => {
+export const usePortfolioValueSeries = (portfolioId, period = '6M', customParams = {}, options = {}) => {
   return useQuery({
-    queryKey: ['portfolios', portfolioId, 'value-series', period],
-    queryFn: () => fetchPortfolioValueSeries(portfolioId, period),
+    queryKey: ['portfolios', portfolioId, 'value-series', period, customParams],
+    queryFn: () => fetchPortfolioValueSeries(portfolioId, period, customParams),
     enabled: !!portfolioId,
     staleTime: 5 * 60 * 1000, // 5 dakika (tarihsel veri sık değişmez)
     ...options,
@@ -151,6 +154,51 @@ export const useDeleteAsset = () => {
       // Portföy asset'lerini ve summary'yi invalidate et
       queryClient.invalidateQueries({ queryKey: ['portfolios', variables.portfolioId, 'assets'] });
       queryClient.invalidateQueries({ queryKey: ['portfolios', variables.portfolioId, 'summary'] });
+    },
+  });
+};
+
+/**
+ * Portföy işlemlerini getirir (transaction history)
+ */
+export const useTransactions = (portfolioId, params = {}, options = {}) => {
+  return useQuery({
+    queryKey: ['portfolios', portfolioId, 'transactions', params],
+    queryFn: () => fetchTransactions(portfolioId, params),
+    enabled: !!portfolioId,
+    staleTime: 1 * 60 * 1000, // 1 dakika
+    ...options,
+  });
+};
+
+/**
+ * Yeni işlem oluşturma mutation
+ */
+export const useCreateTransaction = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ portfolioId, data }) => createTransaction(portfolioId, data),
+    onSuccess: (_, variables) => {
+      // İşlem listesini invalidate et
+      queryClient.invalidateQueries({ queryKey: ['portfolios', variables.portfolioId, 'transactions'] });
+      // Özet bilgilerini de invalidate et (değer değişebilir)
+      queryClient.invalidateQueries({ queryKey: ['portfolios', variables.portfolioId, 'summary'] });
+    },
+  });
+};
+
+/**
+ * İşlem silme mutation
+ */
+export const useDeleteTransaction = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ portfolioId, transactionId }) => deleteTransaction(portfolioId, transactionId),
+    onSuccess: (_, variables) => {
+      // İşlem listesini invalidate et
+      queryClient.invalidateQueries({ queryKey: ['portfolios', variables.portfolioId, 'transactions'] });
     },
   });
 };

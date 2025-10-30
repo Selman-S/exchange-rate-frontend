@@ -135,6 +135,14 @@
   background-color: var(--color-gray-100);
 }
 
+.header-icon-btn.theme-toggle {
+  font-size: 20px;
+}
+
+.header-icon-btn.theme-toggle:hover {
+  transform: rotate(15deg);
+}
+
 .user-avatar-wrapper {
   display: flex;
   align-items: center;

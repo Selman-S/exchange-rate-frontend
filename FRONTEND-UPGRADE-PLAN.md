@@ -1,4 +1,7 @@
-# Frontend Geliştirme Master Planı
+# Frontend V1 Geliştirme Planı (TAMAMLANDI ✅)
+
+> **Not:** Bu doküman Version 1'in geliştirme planıdır. **V1 tamamlanmıştır.**  
+> **Version 2 planı için:** `V2-FRONTEND-PLAN.md` dosyasına bakınız.
 
 ## 📋 İçindekiler
 1. [Backend API Uyumluluk Analizi](#backend-api-uyumluluk-analizi)
@@ -487,107 +490,282 @@ FavoriteSchema.index({ user: 1, assetType: 1, assetName: 1 }, { unique: true });
 
 ---
 
-### **FAZ 6: İşlem Ekleme Modal (Kritik Özellik)** (Tahmini: 4-5 gün)
+### **FAZ 6: İşlem Geçmişi (Transaction Model)** ✅ TAMAMLANDI
 
-#### 6.1. Form Alanları
-- [ ] **Tür:** Radio (Altın / Döviz)
-- [ ] **Enstrüman:** Autocomplete select
-  - API: `GET /api/rates/names?type=gold`
-  - Debounced arama
-- [ ] **İşlem Türü:** Radio (Al / Sat)
-- [ ] **Tarih:** DatePicker
-  - Kısıt: bugün ≤ 
-  - Kısıt: veri aralığı içinde (25 yıl)
-  - **Backend gerekli:** Tarih aralığı bilgisi
-- [ ] **Miktar:** Number input
-  - Validasyon: > 0
-  - Birim göster (gram/adet/tutar)
-- [ ] **Fiyat (TL):** Number input (otomatik doldurulur)
-  - API: `GET /api/rates/price-at?...`
-  - **Backend gerekli:** price-at endpoint
-  - Manuel override toggle
-  - Override ederse uyarı göster
-- [ ] **Not/Etiket:** Text input (opsiyonel)
+#### 6.1. Backend API
+- [x] Transaction model oluşturuldu
+  - [x] Portfolio, asset, side (BUY/SELL), assetType, assetName
+  - [x] amount, price, totalValue, date, note, priceMode
+  - [x] Compound indexes (portfolio+date, portfolio+assetName)
+  - [x] Virtuals (formattedDate, formattedTotal)
+- [x] Transaction controller
+  - [x] getTransactions - Listeleme, arama, filtreleme, pagination
+  - [x] createTransaction - Yeni işlem ekleme
+  - [x] deleteTransaction - İşlem silme
+- [x] Transaction routes
+  - [x] GET `/api/portfolios/:id/transactions`
+  - [x] POST `/api/portfolios/:id/transactions`
+  - [x] DELETE `/api/portfolios/:id/transactions/:transactionId`
+  - [x] Swagger documentation
+- [x] Asset controller entegrasyonu
+  - [x] Asset ekleme → Otomatik BUY transaction kaydı
 
-#### 6.2. Validasyon & UX
-- [ ] Inline hata mesajları
-- [ ] Tarihte veri yoksa öneri göster
-  - "Seçilen tarihte veri bulunamadı. En yakın tarih: dd.mm.yyyy"
-  - Tek tıkla bu tarihi kullan butonu
-- [ ] Form submit loading state
-- [ ] Başarı bildirimi (Toast)
-- [ ] Tabloda yeni işlemi highlight et
+#### 6.2. Frontend API & Hooks
+- [x] portfolioApi.js - 3 yeni fonksiyon
+  - [x] fetchTransactions
+  - [x] createTransaction
+  - [x] deleteTransaction
+- [x] usePortfolio.js - 3 yeni hook
+  - [x] useTransactions
+  - [x] useCreateTransaction
+  - [x] useDeleteTransaction
 
-#### 6.3. API Entegrasyonu
-- [ ] `POST /api/portfolios/:id/assets`
-  - Body: `{ type, name, amount, costPrice, purchaseDate }`
-  - **Backend değişikli gerekli:** purchaseDate ve costPrice parametrelerini kabul et
+#### 6.3. TransactionsTable Component
+- [x] Ant Design Table
+- [x] Sütunlar (9 adet):
+  - [x] Tarih (sortable)
+  - [x] İşlem Türü (BUY/SELL tag)
+  - [x] Enstrüman (icon + tür tag)
+  - [x] Miktar
+  - [x] Fiyat (₺)
+  - [x] Toplam (₺) - renkli (+ yeşil, - kırmızı)
+  - [x] Fiyat Modu (AUTO/MANUAL tag)
+  - [x] Not
+  - [x] Oluşturma tarihi
+  - [x] İşlemler (Sil butonu)
+- [x] Filtreler
+  - [x] Arama (enstrüman adı)
+  - [x] İşlem türü filtresi (Alış/Satış)
+- [x] Pagination (20 kayıt/sayfa)
+- [x] Delete confirmation
+- [x] Responsive (horizontal scroll: 1300px)
 
----
-
-### **FAZ 7: Raporlar & Export** (Tahmini: 3-4 gün)
-
-#### 7.1. Raporlar Sayfası
-- [ ] Dönemsel performans özeti
-  - Tarih aralığı seçici
-  - Toplam getiri (TL ve %)
-  - Günlük getiriler tablosu
-- [ ] **Karşılaştırma Grafiği** (opsiyonel)
-  - Portföy vs USD/EUR/Gram Altın
-  - Normalize edilmiş (100 bazlı)
-  - Multiple line chart
-
-#### 7.2. Export Fonksiyonları
-- [ ] **CSV Export**
-  - react-csv kütüphanesi
-  - İşlemler, günlük portföy değeri, enstrüman özeti
-- [ ] **XLSX Export**
-  - xlsx kütüphanesi
-  - Çoklu sheet'ler
-- [ ] **PDF Export**
-  - jsPDF veya react-pdf
-  - Özet rapor + grafik görselleri
-  - A4 dikey, header/footer
+#### 6.4. PortfolioDetail Entegrasyonu
+- [x] "İşlem Geçmişi" tab eklendi
+- [x] TransactionsTable entegre edildi
+- [x] Real-time update (React Query)
 
 ---
 
-### **FAZ 8: Ayarlar & Kullanıcı Profili** (Tahmini: 2-3 gün)
+### **FAZ 7: Raporlar & Export** ✅ TAMAMLANDI
 
-#### 8.1. Ayarlar Sayfası
-- [ ] Para formatı (₺ sabit)
-- [ ] Sayı gösterimi (binlik ayraç)
-- [ ] Tarih formatı (dd.mm.yyyy sabit)
-- [ ] Varsayılan tarih aralığı
-- [ ] Tema seçimi (Koyu/Açık)
-  - Context API ile persist et (localStorage)
-- [ ] Email bildirim tercihleri (gelecek özellik)
+#### 7.1. Export Fonksiyonları ✅ TAMAMLANDI
+- [x] **Kütüphaneler yüklendi**
+  - [x] xlsx - Excel export
+  - [x] react-csv (kullanılmadı, custom CSV fonksiyonu yazıldı)
+- [x] **Export Utility Fonksiyonları** (`src/utils/exporters.js`)
+  - [x] convertToCSV - CSV dönüşüm helper
+  - [x] downloadFile - Dosya indirme helper
+  - [x] exportAssetsToCSV - Varlıkları CSV'ye export
+  - [x] exportAssetsToExcel - Varlıkları Excel'e export
+  - [x] exportTransactionsToCSV - İşlemleri CSV'ye export
+  - [x] exportTransactionsToExcel - İşlemleri Excel'e export
+- [x] **PerformanceTable Export Butonları**
+  - [x] Dropdown menu (CSV / Excel seçenekleri)
+  - [x] Export fonksiyonları entegre
+  - [x] Success/Warning messages
+  - [x] Özet satırları dahil
+- [x] **TransactionsTable Export Butonları**
+  - [x] Dropdown menu (CSV / Excel seçenekleri)
+  - [x] Export fonksiyonları entegre
+  - [x] Özet hesaplamaları (Toplam Alış/Satış)
+  - [x] Filtre ve arama korunuyor
 
-#### 8.2. Kullanıcı Profili
-- [ ] Profil bilgileri görüntüleme
-- [ ] Email değiştirme
-- [ ] Şifre değiştirme
-- [ ] Hesap silme (confirm dialog)
+#### 7.2. Raporlar Sayfası ✅ TAMAMLANDI
+- [x] **ReportsPage Component** (`src/pages/Reports/ReportsPage.jsx`)
+  - [x] Modern page layout
+  - [x] Responsive tasarım
+  - [x] Route entegrasyonu (`/reports`)
+- [x] **Filtreler**
+  - [x] Portföy seçici (Select)
+  - [x] Tarih aralığı seçici (RangePicker)
+  - [x] Custom date range desteği
+- [x] **Performans Metrikleri (4 Kart)**
+  - [x] Toplam Getiri (TL ve %)
+  - [x] En İyi Gün (tarih + %)
+  - [x] En Kötü Gün (tarih + %)
+  - [x] Volatilite (günlük std. sapma)
+- [x] **Portföy Değer Grafiği**
+  - [x] PerformanceLineChart kullanımı
+  - [x] Backend'den gerçek veri
+  - [x] Custom period desteği (CUSTOM)
+- [x] **Günlük Getiriler Tablosu**
+  - [x] Tarih, Portföy Değeri, Günlük Değişim (TL ve %)
+  - [x] Sıralama özellikleri
+  - [x] Pagination (20 kayıt/sayfa)
+  - [x] Renklendirme (+ yeşil, - kırmızı)
+- [x] **Benchmark Bilgileri**
+  - [x] USD, EUR, Gram Altın fiyatları
+  - [x] Güncel rate'lerden besleniyor
+- [x] **Backend API Geliştirmesi**
+  - [x] CUSTOM period desteği
+  - [x] startDate & endDate parametreleri
+  - [x] Otomatik interval belirleme (daily/weekly/monthly)
+
+#### Tamamlanmayan (Gelecek özellikler)
+- [ ] PDF Export (jsPDF ile rapor oluşturma)
+- [ ] Karşılaştırma grafiği (Portföy vs Benchmark normalize)
 
 ---
 
-### **FAZ 9: Mobil Optimizasyon** (Tahmini: 3-4 gün)
+### **FAZ 8: Ayarlar & Kullanıcı Profili** ✅ TAMAMLANDI
 
-#### 9.1. Responsive Düzenlemeler
-- [ ] Breakpoint'ler test et (360px - 1920px)
-- [ ] Grid'leri mobile için 1 sütun yap
-- [ ] Sidebar → MobileTabBar'a dönüşüm
-- [ ] Drawer'lar full-screen olsun mobilde
-- [ ] Tablolar yatay scroll
+#### 8.1. Theme Context & Dark Mode ✅
+- [x] ThemeContext oluşturuldu
+  - [x] LocalStorage ile persist
+  - [x] Light/Dark mode toggle
+  - [x] useTheme custom hook
+- [x] Dark theme CSS variables
+- [x] Header'a theme toggle butonu
+  - [x] Ay/Güneş ikonu
+  - [x] Tooltip
+  - [x] Smooth animation
+- [x] Ant Design dark mode override
+  - [x] Table, Card, Modal
+  - [x] Input, Select, DatePicker
+  - [x] Button, Pagination, Tag
+  - [x] Dropdown, Tabs, Form
+  - [x] Message, Notification
 
-#### 9.2. Touch Optimizasyonu
-- [ ] Butonlar min 44px (touch target)
-- [ ] Swipe gestures (opsiyonel)
-- [ ] Grafikler pan/zoom çalışsın
+#### 8.2. Backend API ✅
+- [x] Şifre değiştirme endpoint
+  - [x] `PUT /api/auth/change-password`
+  - [x] Mevcut şifre doğrulama
+  - [x] Yeni şifre validasyonu
+  - [x] Swagger documentation
+- [x] Email değiştirme endpoint
+  - [x] `PUT /api/auth/change-email`
+  - [x] Şifre doğrulama
+  - [x] Email format kontrolü
+  - [x] Unique email kontrolü
+  - [x] Swagger documentation
 
-#### 9.3. Performance
-- [ ] Lazy load sayfalar (React.lazy)
-- [ ] Image optimization
-- [ ] Debounce arama & filtreleme
+#### 8.3. Kullanıcı Profili Sayfası ✅
+- [x] ProfilePage component
+- [x] Kullanıcı bilgileri görüntüleme
+  - [x] Email
+  - [x] Hesap oluşturma tarihi
+- [x] Şifre değiştirme formu
+  - [x] Mevcut şifre
+  - [x] Yeni şifre
+  - [x] Şifre tekrar
+  - [x] Validasyon
+  - [x] Success/Error messages
+- [x] Email değiştirme formu
+  - [x] Yeni email
+  - [x] Şifre doğrulama
+  - [x] Email format validasyonu
+  - [x] Success/Error messages
+  - [x] Context update
+- [x] Modern card-based layout
+- [x] Responsive tasarım
+
+#### 8.4. Ayarlar Sayfası ✅
+- [x] SettingsPage component
+- [x] Tema seçimi
+  - [x] Light theme option
+  - [x] Dark theme option
+  - [x] Radio group ile seçim
+  - [x] İkonlar ve açıklamalar
+  - [x] Real-time preview
+- [x] Modern card-based layout
+- [x] Info card (gelecek özellikler)
+- [x] Responsive tasarım
+
+#### 8.5. Route & Navigation ✅
+- [x] `/profile` route eklendi
+- [x] `/settings` route eklendi
+- [x] Header user menu'den erişim
+- [x] PrivateRoute ile korumalı
+
+#### 8.6. Frontend API Services ✅
+- [x] `changePassword` service
+- [x] `changeEmail` service
+- [x] AuthContext `setUser` eklendi
+- [x] `useAuth` custom hook
+
+#### Tamamlanmayan (Gelecek özellikler)
+- [ ] Para formatı tercihi
+- [ ] Sayı gösterimi tercihi
+- [ ] Tarih formatı tercihi
+- [ ] Email bildirim tercihleri
+- [ ] Hesap silme
+
+---
+
+### **FAZ 9: Mobil Optimizasyon** ✅ TAMAMLANDI
+
+#### 9.1. Global CSS Mobil Optimizasyonlar ✅
+- [x] **Touch Target Minimum Boyut** (44x44px)
+  - [x] Button, Input, Select'ler için min-height
+  - [x] Erişilebilirlik standardına uyum
+- [x] **Responsive Breakpoints** (768px, 576px)
+  - [x] Tablet ve mobile için ayrı kurallar
+  - [x] Font boyutları optimize edildi
+- [x] **Card & Padding Optimizasyonları**
+  - [x] Mobile'da daha kompakt padding
+  - [x] Card margin'ler ayarlandı
+- [x] **Table Scroll Optimizasyonu**
+  - [x] Horizontal scroll aktif
+  - [x] iOS smooth scrolling (-webkit-overflow-scrolling: touch)
+- [x] **Modal & Drawer Responsive**
+  - [x] Modal'lar mobile'da full-width
+  - [x] Drawer'lar mobile'da full-screen
+- [x] **Column Stacking**
+  - [x] Grid sütunları mobile'da dikey stack
+  - [x] Margin & padding ayarlamaları
+
+#### 9.2. Viewport & HTML Optimizasyonlar ✅
+- [x] **Viewport Meta Tag İyileştirmeleri**
+  - [x] maximum-scale=5 (kullanıcı zoom izni)
+  - [x] user-scalable=yes
+- [x] **iOS PWA Desteği**
+  - [x] apple-mobile-web-app-capable
+  - [x] apple-mobile-web-app-status-bar-style
+  - [x] apple-mobile-web-app-title
+- [x] **Theme Color Güncellemesi**
+  - [x] Primary color (#2196f3)
+- [x] **Meta Description & Title**
+  - [x] SEO-friendly açıklama
+  - [x] Anlamlı sayfa başlığı
+
+#### 9.3. Performance Optimizasyonları ✅
+- [x] **React Lazy Loading**
+  - [x] Tüm route'lar lazy load
+  - [x] Auth sayfaları hariç (immediate load)
+  - [x] Suspense wrapper ile fallback
+- [x] **Code Splitting**
+  - [x] Sayfa bazlı chunk'lar
+  - [x] İlk yükleme performansı iyileşti
+
+#### 9.4. Mevcut Component'lerin Responsive Durumu ✅
+- [x] **Sidebar**
+  - [x] Mobile'da drawer mode (transform: translateX)
+  - [x] Overlay ile kullanım
+  - [x] Collapse/expand mekanizması
+- [x] **Header**
+  - [x] Mobile'da kompakt görünüm
+  - [x] Search gizleniyor
+  - [x] User name gizleniyor
+  - [x] Menu toggle butonu aktif
+- [x] **Tables**
+  - [x] Horizontal scroll aktif
+  - [x] Compact font size (mobile)
+- [x] **Cards & Grids**
+  - [x] Ant Design Grid sistemi responsive
+  - [x] xs/sm/md/lg breakpoints kullanılıyor
+
+#### 9.5. Font & Typography Responsive ✅
+- [x] **Mobile Font Scaling**
+  - [x] 576px altı için küçültülmüş heading'ler
+  - [x] Base font 16px (iOS zoom önleme)
+  - [x] Statistic text'ler kompakt
+
+#### Tamamlanmayan (Gelecek özellikler)
+- [ ] MobileTabBar (bottom navigation)
+- [ ] Swipe gestures
+- [ ] Image lazy loading & optimization
+- [ ] Service worker & offline mode
 
 ---
 

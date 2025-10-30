@@ -10,4 +10,14 @@ export const register = (name, email, password) => {
   return api.post('/auth/register', { name, email, password });
 };
 
-// Diğer auth işlemleri...
+export const getMe = () => {
+  return api.get('/auth/me');
+};
+
+export const changePassword = (currentPassword, newPassword) => {
+  return api.put('/auth/change-password', { currentPassword, newPassword });
+};
+
+export const changeEmail = (newEmail, password) => {
+  return api.put('/auth/change-email', { newEmail, password });
+};

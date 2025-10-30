@@ -1,7 +1,7 @@
 // src/components/Layout/Header/Header.jsx
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Dropdown, Avatar, Badge } from 'antd';
+import { Dropdown, Avatar, Badge, Tooltip } from 'antd';
 import {
   UserOutlined,
   LogoutOutlined,
@@ -9,12 +9,16 @@ import {
   MenuOutlined,
   SearchOutlined,
   BellOutlined,
+  MoonOutlined,
+  SunOutlined,
 } from '@ant-design/icons';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { useTheme } from '../../../contexts/ThemeContext';
 import './Header.css';
 
 const AppHeader = ({ onMenuToggle }) => {
   const { user, logout } = useContext(AuthContext);
+  const { theme, toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = useState(false);
 
@@ -73,6 +77,13 @@ const AppHeader = ({ onMenuToggle }) => {
       </div>
 
       <div className="header-right">
+        {/* Theme toggle */}
+        <Tooltip title={isDark ? 'Açık Tema' : 'Koyu Tema'}>
+          <button className="header-icon-btn theme-toggle" onClick={toggleTheme}>
+            {isDark ? <SunOutlined /> : <MoonOutlined />}
+          </button>
+        </Tooltip>
+
         {user ? (
           <>
             {/* Notifications */}

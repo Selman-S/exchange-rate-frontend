@@ -1,8 +1,9 @@
 // src/components/Portfolio/PerformanceTable/PerformanceTable.jsx
 import React, { useMemo } from 'react';
-import { Table, Button, Modal, message, Tag } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Modal, message, Tag, Dropdown, Space } from 'antd';
+import { DeleteOutlined, DownloadOutlined, FileExcelOutlined, FileTextOutlined } from '@ant-design/icons';
 import { formatTL, formatPercent, formatDate } from '../../../utils/formatters';
+import { exportAssetsToCSV, exportAssetsToExcel } from '../../../utils/exporters';
 import { useLatestRates } from '../../../hooks';
 import './PerformanceTable.css';
 
@@ -10,7 +11,7 @@ import './PerformanceTable.css';
  * PerformanceTable Component
  * Portföydeki varlıkların performans tablosu
  */
-const PerformanceTable = ({ assets = [], onDeleteAsset, loading = false }) => {
+const PerformanceTable = ({ assets = [], onDeleteAsset, loading = false, portfolioName = 'Portfolio' }) => {
   // En güncel fiyatları çek
   const { data: ratesData, isLoading: ratesLoading } = useLatestRates();
   const rates = ratesData?.data || [];
@@ -217,8 +218,75 @@ const PerformanceTable = ({ assets = [], onDeleteAsset, loading = false }) => {
     );
   };
 
+  // Export fonksiyonları
+  const handleExportCSV = () => {
+    if (assets.length === 0) {
+      message.warning('Export edilecek varlık bulunamadı');
+      return;
+    }
+    
+    // currentPrices map oluştur
+    const currentPrices = {};
+    rates.forEach(rate => {
+      const key = `${rate.type}-${rate.name}`;
+      currentPrices[key] = rate;
+    });
+
+    exportAssetsToCSV(assets, currentPrices, portfolioName);
+    message.success('Varlıklar CSV olarak indirildi');
+  };
+
+  const handleExportExcel = () => {
+    if (assets.length === 0) {
+      message.warning('Export edilecek varlık bulunamadı');
+      return;
+    }
+    
+    // currentPrices map oluştur
+    const currentPrices = {};
+    rates.forEach(rate => {
+      const key = `${rate.type}-${rate.name}`;
+      currentPrices[key] = rate;
+    });
+
+    exportAssetsToExcel(assets, currentPrices, portfolioName);
+    message.success('Varlıklar Excel olarak indirildi');
+  };
+
+  // Export dropdown menu items
+  const exportMenuItems = [
+    {
+      key: 'csv',
+      icon: <FileTextOutlined />,
+      label: 'CSV olarak indir',
+      onClick: handleExportCSV,
+    },
+    {
+      key: 'excel',
+      icon: <FileExcelOutlined />,
+      label: 'Excel olarak indir',
+      onClick: handleExportExcel,
+    },
+  ];
+
   return (
     <div className="performance-table">
+      {/* Export Button */}
+      {assets.length > 0 && (
+        <div className="table-actions" style={{ marginBottom: 16, textAlign: 'right' }}>
+          <Dropdown
+            menu={{ items: exportMenuItems }}
+            placement="bottomRight"
+          >
+            <Button icon={<DownloadOutlined />}>
+              <Space>
+                Dışa Aktar
+              </Space>
+            </Button>
+          </Dropdown>
+        </div>
+      )}
+
       <Table
         columns={columns}
         dataSource={enhancedData}

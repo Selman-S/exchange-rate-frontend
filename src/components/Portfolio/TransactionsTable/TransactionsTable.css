@@ -1,0 +1,68 @@
+/* src/components/Portfolio/TransactionsTable/TransactionsTable.css */
+
+.transactions-table-wrapper {
+  width: 100%;
+}
+
+.table-filters {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.transactions-table .asset-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.transactions-table .asset-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transactions-table .asset-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.transactions-table .asset-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.transactions-table .text-gain {
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+.transactions-table .text-loss {
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.error-state {
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-danger);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .table-filters .ant-input-search,
+  .table-filters .ant-select {
+    width: 100% !important;
+  }
+}
+

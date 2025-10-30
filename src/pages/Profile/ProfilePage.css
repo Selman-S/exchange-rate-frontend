@@ -1,0 +1,95 @@
+/* src/pages/Profile/ProfilePage.css */
+
+.profile-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.profile-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.page-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.profile-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-card .ant-card-head-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.profile-card .ant-card-head-title svg {
+  margin-right: var(--spacing-sm);
+  color: var(--color-primary);
+}
+
+/* Info groups */
+.info-group {
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.info-group:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* Forms */
+.profile-card .ant-form {
+  max-width: 100%;
+}
+
+.profile-card .ant-form-item-label > label {
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .profile-card {
+    box-shadow: none;
+    border: 1px solid var(--color-border);
+  }
+}
+

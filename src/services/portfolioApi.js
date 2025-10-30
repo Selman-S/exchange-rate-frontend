@@ -87,10 +87,42 @@ export const deleteAsset = async (portfolioId, assetId) => {
 /**
  * Portföy değer serisini getirir (tarihsel performans)
  * @param {string} portfolioId - Portföy ID
- * @param {string} period - Zaman aralığı (1M, 3M, 6M, 1Y, ALL)
+ * @param {string} period - Zaman aralığı (1M, 3M, 6M, 1Y, ALL, CUSTOM)
+ * @param {Object} customParams - Custom params for CUSTOM period (startDate, endDate)
  * @returns {Promise}
  */
-export const fetchPortfolioValueSeries = async (portfolioId, period = '6M') => {
-  return api.get(`/portfolios/${portfolioId}/value-series?period=${period}`);
+export const fetchPortfolioValueSeries = async (portfolioId, period = '6M', customParams = {}) => {
+  const params = { period, ...customParams };
+  return api.get(`/portfolios/${portfolioId}/value-series`, { params });
+};
+
+/**
+ * Portföy işlemlerini getirir (transaction history)
+ * @param {string} portfolioId - Portföy ID
+ * @param {Object} params - Query parameters (search, side, page, limit)
+ * @returns {Promise}
+ */
+export const fetchTransactions = async (portfolioId, params = {}) => {
+  return api.get(`/portfolios/${portfolioId}/transactions`, { params });
+};
+
+/**
+ * Yeni işlem oluşturur
+ * @param {string} portfolioId - Portföy ID
+ * @param {Object} data - Transaction data
+ * @returns {Promise}
+ */
+export const createTransaction = async (portfolioId, data) => {
+  return api.post(`/portfolios/${portfolioId}/transactions`, data);
+};
+
+/**
+ * İşlem siler
+ * @param {string} portfolioId - Portföy ID
+ * @param {string} transactionId - Transaction ID
+ * @returns {Promise}
+ */
+export const deleteTransaction = async (portfolioId, transactionId) => {
+  return api.delete(`/portfolios/${portfolioId}/transactions/${transactionId}`);
 };
 

@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Button, Tabs, message } from 'antd';
 import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { Loading, EmptyState, Card } from '../../components/Common';
-import { PortfolioSummaryCard, PerformanceTable, AddAssetModal } from '../../components/Portfolio';
+import { PortfolioSummaryCard, PerformanceTable, AddAssetModal, TransactionsTable } from '../../components/Portfolio';
 import { DonutChart, PerformanceLineChart, PeriodSelector } from '../../components/Chart';
 import { 
   usePortfolio, 
@@ -190,6 +190,19 @@ const PortfolioDetail = () => {
             assets={assets}
             onDeleteAsset={handleDeleteAsset}
             loading={assetsLoading}
+            portfolioName={portfolio?.name || 'Portfolio'}
+          />
+        </div>
+      ),
+    },
+    {
+      key: 'transactions',
+      label: 'İşlem Geçmişi',
+      children: (
+        <div className="tab-content">
+          <TransactionsTable 
+            portfolioId={id} 
+            portfolioName={portfolio?.name || 'Portfolio'} 
           />
         </div>
       ),
