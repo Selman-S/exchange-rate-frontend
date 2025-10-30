@@ -6,6 +6,8 @@ import {
   fetchRateNames,
   fetchLatestRates,
   fetchSparklineData,
+  fetchHourlyRates,
+  fetchPriceChange,
 } from '../services/marketApi';
 
 /**
@@ -76,6 +78,36 @@ export const useSparklineData = (params, options = {}) => {
     queryKey: ['rates', 'sparkline', params],
     queryFn: () => fetchSparklineData(params),
     enabled: !!(params?.type && params?.name),
+    staleTime: 5 * 60 * 1000, // 5 dakika
+    ...options,
+  });
+};
+
+/**
+ * Saatlik fiyat verilerini getirir
+ * @param {string} date - Tarih (YYYY-MM-DD)
+ * @param {Object} options - React Query options
+ */
+export const useHourlyRates = (date, options = {}) => {
+  return useQuery({
+    queryKey: ['rates', 'hourly', date],
+    queryFn: () => fetchHourlyRates(date),
+    staleTime: 5 * 60 * 1000, // 5 dakika
+    refetchInterval: 60 * 60 * 1000, // 1 saatte bir refresh
+    ...options,
+  });
+};
+
+/**
+ * Fiyat değişim yüzdesini getirir
+ * @param {Object} params - { type, name, period }
+ * @param {Object} options - React Query options
+ */
+export const usePriceChange = (params, options = {}) => {
+  return useQuery({
+    queryKey: ['rates', 'change', params],
+    queryFn: () => fetchPriceChange(params),
+    enabled: !!(params?.type && params?.name && params?.period),
     staleTime: 5 * 60 * 1000, // 5 dakika
     ...options,
   });

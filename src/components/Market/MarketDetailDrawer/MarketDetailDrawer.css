@@ -1,0 +1,61 @@
+/* src/components/Market/MarketDetailDrawer/MarketDetailDrawer.css */
+
+.market-detail-drawer .drawer-current-price {
+  text-align: center;
+  padding: var(--spacing-lg) 0;
+}
+
+.drawer-time-range {
+  margin-bottom: var(--spacing-lg);
+}
+
+.drawer-chart {
+  margin-bottom: var(--spacing-lg);
+}
+
+.chart-loading,
+.chart-empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
+}
+
+.drawer-statistics {
+  margin-bottom: var(--spacing-lg);
+}
+
+.drawer-info {
+  padding: var(--spacing-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .market-detail-drawer .ant-drawer-content-wrapper {
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
+  .market-detail-drawer .ant-drawer-header-title {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: var(--spacing-sm);
+  }
+
+  .market-detail-drawer .ant-drawer-extra {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  .market-detail-drawer .ant-drawer-extra > .ant-space {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .market-detail-drawer .ant-drawer-extra .ant-btn {
+    width: 100%;
+  }
+}
+

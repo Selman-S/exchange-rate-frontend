@@ -1,10 +1,11 @@
 // src/pages/Market/MarketPage.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { message } from 'antd';
 import MarketFilters from '../../components/Market/MarketFilters';
 import PriceGrid from '../../components/Market/PriceGrid';
+import MarketDetailDrawer from '../../components/Market/MarketDetailDrawer/MarketDetailDrawer';
 import { useLatestRates } from '../../hooks/useMarket';
-import { useLocalStorage } from '../../hooks';
+import { useFavorites, useAddFavorite, useDeleteFavorite, useAutoMigrateFavorites } from '../../hooks/useFavorites';
 import './MarketPage.css';
 
 /**
@@ -16,7 +17,26 @@ const MarketPage = () => {
   const [typeFilter, setTypeFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name-asc');
   const [showFavorites, setShowFavorites] = useState(false);
-  const [favorites, setFavorites] = useLocalStorage('market-favorites', []);
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  
+  // Backend'den favoriler
+  const { data: favoritesData } = useFavorites();
+  const addFavoriteMutation = useAddFavorite();
+  const deleteFavoriteMutation = useDeleteFavorite();
+  
+  // Auto-migration on mount
+  const { checkAndMigrate } = useAutoMigrateFavorites();
+  
+  useEffect(() => {
+    checkAndMigrate();
+  }, []);
+  
+  // Backend'den gelen favorileri map'le
+  const favorites = useMemo(() => {
+    if (!favoritesData?.data) return [];
+    return favoritesData.data.map(fav => `${fav.assetType}-${fav.assetName}`);
+  }, [favoritesData]);
 
   // API'den verileri çek
   const { data, isLoading, error } = useLatestRates(
@@ -72,15 +92,22 @@ const MarketPage = () => {
     return rates;
   }, [data, searchTerm, showFavorites, sortBy, favorites]);
 
-  // Favori toggle
+  // Favori toggle - Backend ile senkronize
   const handleFavoriteToggle = (type, name) => {
     const key = `${type}-${name}`;
+    
     if (favorites.includes(key)) {
-      setFavorites(favorites.filter((fav) => fav !== key));
-      message.success('Favorilerden çıkarıldı');
+      // Favoriyi sil
+      const favoriteItem = favoritesData?.data?.find(
+        fav => fav.assetType === type && fav.assetName === name
+      );
+      
+      if (favoriteItem) {
+        deleteFavoriteMutation.mutate(favoriteItem._id);
+      }
     } else {
-      setFavorites([...favorites, key]);
-      message.success('Favorilere eklendi');
+      // Favori ekle
+      addFavoriteMutation.mutate({ assetType: type, assetName: name });
     }
   };
 
@@ -94,9 +121,28 @@ const MarketPage = () => {
 
   // Kart tıklama
   const handleCardClick = (rate) => {
-    console.log('Card clicked:', rate);
-    // TODO: Detay drawer açılacak
-    message.info('Detay sayfası yakında eklenecek');
+    setSelectedAsset(rate);
+    setDrawerOpen(true);
+  };
+
+  // Drawer kapatma
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+    setTimeout(() => setSelectedAsset(null), 300); // Animation için bekle
+  };
+
+  // Drawer'dan favori toggle
+  const handleDrawerFavoriteToggle = () => {
+    if (selectedAsset) {
+      handleFavoriteToggle(selectedAsset);
+    }
+  };
+
+  // Drawer'dan alarm oluştur
+  const handleCreateAlertFromDrawer = () => {
+    message.info('Alarm oluşturma sayfasına yönlendiriliyorsunuz...');
+    // TODO: Alarm modal aç veya alarm sayfasına yönlendir
+    // window.location.href = '/alerts';
   };
 
   return (
@@ -144,6 +190,20 @@ const MarketPage = () => {
             : 'Varlık bulunamadı'
         }
       />
+
+      {/* Detail Drawer */}
+      {selectedAsset && (
+        <MarketDetailDrawer
+          open={drawerOpen}
+          onClose={handleDrawerClose}
+          assetType={selectedAsset.type}
+          assetName={selectedAsset.name}
+          currentPrice={selectedAsset.sellPrice}
+          isFavorite={favorites.includes(`${selectedAsset.type}-${selectedAsset.name}`)}
+          onFavoriteToggle={handleDrawerFavoriteToggle}
+          onCreateAlert={handleCreateAlertFromDrawer}
+        />
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Table } from 'antd';
 import api from '../../services/api';
-import { formatTL } from '../../utils/formatTL';
+import { formatTL } from '../../utils/formatters';
 
 const { Title } = Typography;
 

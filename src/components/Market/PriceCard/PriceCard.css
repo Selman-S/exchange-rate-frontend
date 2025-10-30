@@ -77,6 +77,21 @@
   color: var(--color-text-secondary);
 }
 
+/* Period Selector */
+.price-card-period {
+  display: flex;
+  justify-content: center;
+}
+
+.price-card-period .ant-segmented {
+  font-size: var(--font-size-xs);
+}
+
+.price-card-period .ant-segmented-item {
+  padding: 2px 8px;
+  min-height: 24px;
+}
+
 /* Change */
 .price-card-change {
   display: flex;
@@ -84,6 +99,13 @@
   gap: var(--spacing-xs);
   font-size: var(--font-size-sm);
   font-weight: 600;
+  min-height: 24px;
+}
+
+.price-card-change.loading {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  font-size: var(--font-size-xs);
 }
 
 .price-card-change.positive {

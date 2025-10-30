@@ -7,6 +7,8 @@ import {
   LineChartOutlined,
   SettingOutlined,
   DashboardOutlined,
+  BellOutlined,
+  CalculatorOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames';
 import './Sidebar.css';
@@ -29,6 +31,24 @@ const menuItems = [
     path: '/portfolios',
     icon: <FolderOpenOutlined />,
     label: 'Portföylerim',
+  },
+  {
+    key: 'alerts',
+    path: '/alerts',
+    icon: <BellOutlined />,
+    label: 'Alarmlar',
+  },
+  {
+    key: 'simulator',
+    path: '/simulator',
+    icon: <CalculatorOutlined />,
+    label: 'Simülatör',
+  },
+  {
+    key: 'comparison',
+    path: '/comparison',
+    icon: <LineChartOutlined />,
+    label: 'Karşılaştırma',
   },
   {
     key: 'reports',

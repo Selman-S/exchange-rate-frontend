@@ -19,6 +19,9 @@ const PortfolioDetail = lazy(() => import('./pages/Portfolio/PortfolioDetail.jsx
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'));
 const SettingsPage = lazy(() => import('./pages/Settings/SettingsPage'));
 const ReportsPage = lazy(() => import('./pages/Reports/ReportsPage'));
+const AlertsPage = lazy(() => import('./pages/Alerts/AlertsPage'));
+const SimulatorPage = lazy(() => import('./pages/Simulator/SimulatorPage'));
+const ComparisonPage = lazy(() => import('./pages/Comparison/ComparisonPage'));
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -84,6 +87,30 @@ function App() {
             element={
               <PrivateRoute>
                 <ReportsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/alerts"
+            element={
+              <PrivateRoute>
+                <AlertsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/simulator"
+            element={
+              <PrivateRoute>
+                <SimulatorPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/comparison"
+            element={
+              <PrivateRoute>
+                <ComparisonPage />
               </PrivateRoute>
             }
           />

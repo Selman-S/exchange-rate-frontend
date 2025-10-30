@@ -107,3 +107,26 @@ export const fetchSparklineData = async ({ type, name, days = 7 }) => {
   });
 };
 
+/**
+ * Saatlik fiyat verilerini getirir
+ * @param {string} date - Tarih (YYYY-MM-DD), varsayılan: bugün
+ * @returns {Promise}
+ */
+export const fetchHourlyRates = async (date) => {
+  const queryParams = date ? `?date=${date}` : '';
+  return api.get(`/rates/hourly${queryParams}`);
+};
+
+/**
+ * Fiyat değişim yüzdesini getirir
+ * @param {Object} params
+ * @param {string} params.type - 'gold' | 'currency'
+ * @param {string} params.name - Varlık adı
+ * @param {string} params.period - 'daily' | 'weekly' | 'monthly' | 'yearly'
+ * @returns {Promise}
+ */
+export const fetchPriceChange = async ({ type, name, period }) => {
+  const queryParams = new URLSearchParams({ type, name, period });
+  return api.get(`/rates/change?${queryParams.toString()}`);
+};
+
